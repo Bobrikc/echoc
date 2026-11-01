@@ -15,7 +15,7 @@ import net.minecraft.server.level.ServerPlayer;
 public final class Payload {
     public static final char SEP = '\u001f';
     public static final String PREFIX = "echocity>";
-
+    public static final char END = '\u001e';
     private Payload() {}
 
     /** Окно диалога: mode = n (обычный), e (мысль, услышанная эхом), s (рассказчик). */
@@ -57,7 +57,7 @@ public final class Payload {
     /** Сообщение: невидимая метка с данными + читаемый запасной текст. */
     public static MutableComponent wrap(String payload, Component fallback) {
         MutableComponent root = Component.empty();
-        root.append(Component.literal("").withStyle(s -> s.withInsertion(payload)));
+        root.append(Component.literal(payload + END));
         if (fallback != null) root.append(fallback);
         return root;
     }
