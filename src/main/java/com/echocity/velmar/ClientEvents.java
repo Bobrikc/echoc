@@ -25,7 +25,13 @@ public final class ClientEvents {
     @SubscribeEvent
     public static void onChat(ClientChatReceivedEvent event) {
         String payload = findPayload(event.getMessage());
-        if (payload == null) return;
+        if (payload == null) {
+            String s = event.getMessage().getString();
+            int i = s.indexOf(Payload.PREFIX);
+            if (i < 0) return;
+            int j = s.indexOf(Payload.END, i);
+            payload = j < 0 ? s.substring(i) : s.substring(i, j);
+        }
         String[] f = Payload.parse(payload);
         if (f == null || f.length == 0) return;
         event.setCanceled(true);
