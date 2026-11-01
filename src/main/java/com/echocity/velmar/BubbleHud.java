@@ -10,7 +10,7 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiEvent;
+import net.minecraftforge.client.event.CustomizeGuiOverLayEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -38,7 +38,7 @@ public final class BubbleHud {
     }
 
     @SubscribeEvent
-    public static void onRender(RenderGuiEvent.Post e) {
+    public static void onRender(CustomizeGuiOverlayEvent.Chat e) {
         if (text.isEmpty()) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen != null || mc.options.hideGui) return;
