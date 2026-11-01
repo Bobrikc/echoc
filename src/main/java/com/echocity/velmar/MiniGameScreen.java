@@ -81,7 +81,12 @@ public final class MiniGameScreen extends Screen {
     @Override public boolean shouldCloseOnEsc() { return false; }
     @Override public void renderBackground(GuiGraphics g, int mx, int my, float pt) { /* рисуем сами */ }
 
+    // у разных звуков в 1.21.1 разные типы (SoundEvent или Holder), поэтому два варианта
     private void snd(net.minecraft.sounds.SoundEvent e, float pitch) {
+        this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(e, pitch));
+    }
+
+    private void snd(net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent> e, float pitch) {
         this.minecraft.getSoundManager().play(SimpleSoundInstance.forUI(e, pitch));
     }
 
@@ -114,7 +119,8 @@ public final class MiniGameScreen extends Screen {
     private void finish(boolean win, String text) {
         if (phase == 2) return;
         phase = 2; won = win; resultText = text; doneTimer = 0;
-        snd(win ? SoundEvents.EXPERIENCE_ORB_PICKUP : SoundEvents.VILLAGER_NO, win ? 1.0F : 1.0F);
+        if (win) snd(SoundEvents.EXPERIENCE_ORB_PICKUP, 1.0F);
+        else snd(SoundEvents.VILLAGER_NO, 1.0F);
     }
 
     private void send(String res) {
@@ -189,7 +195,7 @@ public final class MiniGameScreen extends Screen {
         cupTimer++;
         switch (cupSub) {
             case 0 -> { if (cupTimer > 50) { cupSub = 1; cupTimer = 0; } }          // показываем монету
-            case 1 -> { if (cupTimer > 12) { cupSub = 2; cupTimer = 0; swapT = 0; } } // опускаем чашки
+        case 1 -> { if (cupTimer > 12) { cupSub = 2; cupTimer = 0; swapT = 0; } } // опускаем чашки
             case 2 -> {
                 if (++swapT >= swapDur) {
                     int[] s = swaps.get(swapIdx);
